@@ -6,7 +6,17 @@ class Database {
 	private $_username = "root";
 	private $_password = "";
 	private $_database = "schoolmanagement";
-	
+	/*
+	Get an instance of the Database
+	@return Instance
+	*/
+	public static function getInstance() {
+		if(!self::$_instance) { // If no instance then make one
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+	// Constructor
 	public function __construct() {
 		$this->_connection = new mysqli($this->_host, $this->_username,	$this->_password, $this->_database);
 	
