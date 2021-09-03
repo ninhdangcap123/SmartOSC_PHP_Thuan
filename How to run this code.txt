@@ -1,0 +1,14 @@
+Download .zip file form GitHub
+
+Open Xampp or Wampp or Lamp
+
+Extract .zip file to xampp/htdocs or var/www/html
+
+Open PHPMyAdmin and import schoolmanagement.sql file
+
+Check Credentials of your PHPMyAdmin and change it accordingly in the Database.php file
+
+Open Browser with the URL:http://localhost/Studentmanagement-master/index.php?Controller=Student&action=login
+
+Login Id : admin
+Password : admin
