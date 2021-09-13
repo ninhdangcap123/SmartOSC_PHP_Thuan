@@ -1,6 +1,6 @@
 <?php
-	require('App/Model/Database.php');
-	class Student_Model
+	require('App/Model/BaseModel.php');
+	class Student_Model extends BaseModel
 	{
 		function login($loginid,$password)
 			{
@@ -11,9 +11,9 @@
 				else
 					{
 						$db = Database::getInstance();
-						$mysqli = $db->getConnection();
+						$pdo = $db->getConnection();
 						$query = "SELECT loginid, password FROM tbl_login where loginid=? and password=? ";
-						$stmt= $mysqli->prepare($query);
+						$stmt= $pdo->prepare($query);
 						if(false===$stmt)
 							{
 								trigger_error("Error in query: " . mysqli_connect_error(),E_USER_ERROR);
@@ -35,79 +35,71 @@
 		
 		function showSession()
 			{
-				$db = Database::getInstance();
-				$mysqli = $db->getConnection();
-				$query = "SELECT * FROM session  ";
-				$stmt= $mysqli->query($query);
-				return $stmt;
+				
+				$showSession = "SELECT * FROM session  ";
+				$this = BaseModel::show($showSession);
+            	return $this;
 			}
 
 		function showCountry()
 			{
-				$db = Database::getInstance();
-				$mysqli = $db->getConnection();
-				$query = "SELECT * FROM countries ";
-				$stmt= $mysqli->query($query);
-				return $stmt;
+				
+				$showCountry = "SELECT * FROM countries ";
+				$this = BaseModel::show($showCountry);
+            	return $this;
 			}
 
 		function showCourse()
 	  		{
-			 	$db = Database::getInstance();
-			    $mysqli = $db->getConnection();
-			    $query = "SELECT * FROM tbl_course ";
-			    $stmt= $mysqli->query($query);
-			    return $stmt;    
+			 	
+			    $showCourse = "SELECT * FROM tbl_course ";
+			    $this = BaseModel::show($showCourse);
+            	return $this;
 	  		}
 
 		function showState()
 			{
-				$db = Database::getInstance();
-				$mysqli = $db->getConnection();
-				$query = "SELECT * FROM states ";
-				$stmt= $mysqli->query($query);
-				return $stmt;
+				
+				$showState = "SELECT * FROM states ";
+				$this = BaseModel::show($showState);
+            	return $this;				
 			}
 
 		function showCity()
 			{
-				$db = Database::getInstance();
-				$mysqli = $db->getConnection();
-				$query = "SELECT * FROM cities ";
-				$stmt= $mysqli->query($query);
-				return $stmt;
+				
+				$showCity = "SELECT * FROM cities ";
+				$this = BaseModel::show($showci);
+            	return $this;
 			}
 
 		function showStudents()
 			{
-				$db = Database::getInstance();
-				$mysqli = $db->getConnection();
-				$query = "SELECT * FROM registration ";
-				$stmt= $mysqli->query($query);
-				return $stmt;
+				
+				$showStudents = "SELECT * FROM registration ";
+				$this = BaseModel::show($showStudents);
+            	return $this;
 			}
 
 		function showStudents1($id)
 			{
-				$db = Database::getInstance();
-				$mysqli = $db->getConnection();
-				$query = "SELECT * FROM registration  where id='".$id."'";
-				$stmt= $mysqli->query($query);
-				return $stmt;
+				
+				$showStudents1 = "SELECT * FROM registration  where id='".$id."'";
+				$this = BaseModel::show($showStudents1);
+            	return $this;
 			}
 
 		function register($cshort,$cfull,$fname,$mname,$lname,$gender,$gname,$ocp,$income,$category,$ph,
 	                $nation,$mobno,$email,$country,$state,$city,$padd,$cadd,$board1,$board2,$roll1,$roll2,
 					$pyear1,$pyear2,$sub1,$sub2,$marks1,$marks2,$fmarks1,$fmarks2,$session)
 			{
-     			$db = Database::getInstance();
-     			$mysqli = $db->getConnection();
+     			
       			$query = "INSERT INTO `registration` (`course`, `subject`, `fname`, `mname`, `lname`, `gender`, `gname`, `ocp`,`income`, `category`, `pchal`, `nationality`, `mobno`, `emailid`, `country`, `state`, `dist`, `padd`, `cadd`, `board`, `board1`,`roll`,`roll1`,`pyear`,`yop1`,`sub`,`sub1`,`marks`,`marks1`, `fmarks`,`fmarks1`,`session`,regno)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				$reg=rand();
-				$stmt= $mysqli->prepare($query);
+				$stmt= $pdo->prepare($query);
 				if(false===$stmt)
 					{
-					     trigger_error("Error in query: " . mysqli_connect_error(),E_USER_ERROR);
+					     trigger_error("Error in query");
 					}
 			    else
 					{
@@ -119,42 +111,22 @@
 		function edit_std($cshort,$cfull,$fname,$mname,$lname,$gender,$gname,$ocp,$income,$category,$ph,
 		            $nation,$mobno,$email,$country,$state,$city,$padd,$cadd,$board1,$board2,$roll1,$roll2,
 					$pyear1,$pyear2,$sub1,$sub2,$marks1,$marks2,$fmarks1,$fmarks2,$id)
-			{
-
-			 	$db = Database::getInstance();
-				$mysqli = $db->getConnection();
-				$query = "update registration set course=?,subject=?,fname=?,mname=?,lname=?,gender=?,gname=?,ocp=?, income=?,category=?,pchal=?,nationality=?,mobno=?,emailid=?,country=?,state=?,dist=?
+			{			 	
+				$edit = "update registration set course=?,subject=?,fname=?,mname=?,lname=?,gender=?,gname=?,ocp=?, income=?,category=?,pchal=?,nationality=?,mobno=?,emailid=?,country=?,state=?,dist=?
 			        ,padd=?,cadd=?,board=?,roll=?,pyear=?,sub=?,marks=?,fmarks=?,board1=?,roll1=?,yop1=?,sub1=?
 			        ,marks1=?,fmarks1=? where id=?";
-
-				$stmt= $mysqli->prepare($query);
-				if(false===$stmt)
-					{
-						trigger_error("Error in query: " . mysqli_connect_error(),E_USER_ERROR);
-					}
-				$rc=$stmt->bind_param('sssssssssssssssssssssssssssssssi',$cshort,$cfull,$fname,$mname,$lname,$gender,$gname,$ocp,$income,$category,$ph,$nation,$mobno,$email,$country,$state,$city,$padd,$cadd,$board1,$board2,$roll1,$roll2,$pyear1,$pyear2,$sub1,$sub2,$marks1,$marks2,$fmarks1,$fmarks2,$id);
-
-			  	if ( false===$rc )
-					{
-				      	die('bind_param() failed: ' . htmlspecialchars($stmt->error));
-				  	}
-				$rc=$stmt->execute();
-				if ( false==$rc )
-					{
-					    die('execute() failed: ' . htmlspecialchars($stmt->error));
-					}
+				
+				$this = BaseModel::edit($edit,$cshort,$cfull,$fname,$mname,$lname,$gender,$gname,$ocp,$income,$category,$ph,$nation,$mobno,$email,$country,$state,$city,$padd,$cadd,$board1,$board2,$roll1,$roll2,$pyear1,$pyear2,$sub1,$sub2,$marks1,$marks2,$fmarks1,$fmarks2,$id;
+            	return $this;
+  					
 			
 			}
 
 		function del_std($id)
-			{
-
-			   	$db = Database::getInstance();
-			    $mysqli = $db->getConnection();
-			    $query="delete from registration where id=?";
-			    $stmt= $mysqli->prepare($query);
-			    $stmt->bind_param('i',$id);
-				$stmt->execute();
+			{			   	
+			    $del="delete from registration where id=?";
+			    $this = BaseModel::del($del,$id);
+            	return $this;
 			  
 			}
 

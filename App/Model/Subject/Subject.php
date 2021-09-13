@@ -1,31 +1,28 @@
 <?php
-  require('App/Model/Database.php');
+  require('App/Model/BaseModel.php');
 
-  class Subject_Model
+  class Subject_Model extends BaseModel
     {
       function showCourse()
         {
-            $db = Database::getInstance();
-            $mysqli = $db->getConnection();
-            $query = "SELECT * FROM tbl_course ";
-            $stmt= $mysqli->query($query);
-            return $stmt;
+            
+            $showCourse = "SELECT * FROM tbl_course ";
+            $this = BaseModel::show($showCourse);
+            return $this;
         }
       function showSubject()
         {
-          $db = Database::getInstance();
-          $mysqli = $db->getConnection();
-          $query = "SELECT * FROM subject ";
-          $stmt= $mysqli->query($query);
-          return $stmt;
+          
+          $showSubject = "SELECT * FROM subject ";
+          $this = BaseModel::show($showSubject);
+          return $this;
         }
       function showSubject1($sid)
         {
-          $db = Database::getInstance();
-          $mysqli = $db->getConnection();
-          $query = "SELECT * FROM subject where subid='$sid' ";
-          $stmt= $mysqli->query($query);
-          return $stmt;
+          
+          $showSubject1 = "SELECT * FROM subject where subid='$sid' ";
+          $this = BaseModel::show($showSubject1);
+          return $this;
         }
       function create_subject($cshort,$cfull,$sub1,$sub2,$sub3)
         {
@@ -39,40 +36,26 @@
             }
             else
             {
-                $db = Database::getInstance();
-                $mysqli = $db->getConnection();
-                $query = "insert into subject(cshort,cfull,sub1,sub2,sub3)values(?,?,?,?,?)";
-                $stmt= $mysqli->prepare($query);
-                if(false===$stmt)
-                {
-                  trigger_error("Error in query: " . mysqli_connect_error(),E_USER_ERROR);
-                }
-                else
-                {
-                  $stmt->bind_param('sssss',$cshort,$cfull,$sub1,$sub2,$sub3);
-                  $stmt->execute();
-                  
-                }
-              }
+                
+                $create = "insert into subject(cshort,cfull,sub1,sub2,sub3)values(?,?,?,?,?)";
+                $this = BaseModel::create($create,$cshort,$cfull,$sub1,$sub2,$sub3);
+                return $this;
+            }
         }
       function edit_subject($sub1,$sub2,$sub3,$udate,$id)
       	{
-      	    $db = Database::getInstance();
-      			$mysqli = $db->getConnection();
-      			$query = "update subject set sub1=?,sub2=? ,sub3=?,update_date=? where subid=?";
-      			$stmt= $mysqli->prepare($query);
-      			$stmt->bind_param('ssssi',$sub1,$sub2,$sub3,$udate,$id);
-      			$stmt->execute();
+      	    
+      			$edit = "update subject set sub1=?,sub2=? ,sub3=?,update_date=? where subid=?";
+      			$this = BaseModel::edit($edit,$sub1,$sub2,$sub3,$udate,$id);
+            return $this;
       	    
       	}
       function del_subject($id)
       	{
-      	    $db = Database::getInstance();
-      	    $mysqli = $db->getConnection();
-      	    $query="delete from subject where subid=?";
-      	    $stmt= $mysqli->prepare($query);
-      	    $stmt->bind_param('i',$id);
-      			$stmt->execute();
+      	    
+      	    $del="delete from subject where subid=?";
+      	    $this = BaseModel::del($del,$id);
+            return $this;
       	    
       	}
 

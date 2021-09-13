@@ -1,57 +1,43 @@
 <?php
-  require('App/Model/Database.php');
-  class Course_Model
+  require('App/Model/BaseModel.php');
+  class Course_Model extends BaseModel
     {
       function create_course($cshort,$cfull,$cdate)
         {
           
-            $db = Database::getInstance();
-            $mysqli = $db->getConnection();
-            $query = "insert into tbl_course(cshort,cfull,cdate)values(?,?,?)";
-            $stmt= $mysqli->prepare($query);
-              if(false===$stmt)
-                {
-                   trigger_error("Error in query: " . mysqli_connect_error(),E_USER_ERROR);
-                }
-              else
-                {
-                   $stmt->bind_param('sss',$cshort,$cfull,$cdate);
-                   $stmt->execute();
-                }
+            $create = "insert into tbl_course(cshort,cfull,cdate)values(?,?,?)";
+            $this = BaseModel::create($create,$cshort,$cfull,$cdate);
+            return $this;
         }
       function showCourse()
         {
-            $db = Database::getInstance();
-            $mysqli = $db->getConnection();
-            $query = "SELECT * FROM tbl_course ";
-            $stmt= $mysqli->query($query);
-            return $stmt;
+            
+            $show = "SELECT * FROM tbl_course ";
+            $this = BaseModel::show($show);
+            return $this;
         }
       function showCourse1($cid)
         {
-            $db = Database::getInstance();
-            $mysqli = $db->getConnection();
-            $query = "SELECT * FROM tbl_course  where cid='".$cid."'";
-            $stmt= $mysqli->query($query);
-            return $stmt;
+            
+            $show1 = "SELECT * FROM tbl_course  where cid='".$cid."'";
+            $this = BaseModel::show($show1);
+            return $this;
+            
         }
       function edit_course($cshort,$cfull,$udate,$id)
         {
-             $db = Database::getInstance();
-             $mysqli = $db->getConnection();
-             $query = "update tbl_course set cshort=?,cfull=? ,update_date=? where cid=?";
-             $stmt= $mysqli->prepare($query);
-             $stmt->bind_param('sssi',$cshort,$cfull,$udate,$id);
-             $stmt->execute();
+             
+            $edit = "update tbl_course set cshort=?,cfull=? ,update_date=? where cid=?";
+            $this = BaseModel::edit($edit,$cshort,$cfull,$udate,$id);
+            return $this;
+             
         }
        function del_course($id)
         {
-             $db = Database::getInstance();
-             $mysqli = $db->getConnection();
-             $query="delete from tbl_course where cid=?";
-             $stmt= $mysqli->prepare($query);
-             $stmt->bind_param('s',$id);
-             $stmt->execute();    
+             
+            $del="delete from tbl_course where cid=?";
+            $this = BaseModel::del($del,$id);
+            return $this;
         }
     }
 ?>
